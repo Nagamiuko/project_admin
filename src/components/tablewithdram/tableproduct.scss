@@ -1,0 +1,79 @@
+.cellWithImg {
+  display: flex;
+  align-items: center;
+  & p{
+    white-space: nowrap;
+    width: 340px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .cellImg {
+    width: 35px;
+    height: 35px;
+    border-radius: 10%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+
+  .status {
+    padding: 5px;
+    border-radius: 5px;
+
+    &.User {
+      color: green;
+      background-color: rgba(0, 128, 0, 0.151);
+    }
+
+    &.Admin {
+      color: goldenrod;
+      background-color: rgba(189, 189, 3, 0.103);
+    }
+  }
+}
+.cellAction {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  .AllowButton {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: rgb(0, 139, 46);
+    border: 1px dotted rgba(0, 139, 19, 0.596);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .AllowButton:hover {
+    color: rgb(255, 255, 255);
+    background-color:rgba(0, 139, 19, 0.596) ;
+  }
+  .CheckButton{
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: rgb(255, 179, 28);
+    border: 1px dotted rgba(255, 179, 0, 0.596);
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: transparent;
+  }
+  
+  .deleteButton {
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: crimson;
+    border: 1px dotted rgba(220, 20, 60, 0.6);
+    cursor: pointer;
+  }
+
+}
+.search-bar{
+  width: 100%;
+  & p{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
