@@ -26,7 +26,7 @@ const DetailProduct = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <a target="_back_view" href={`http://localhost:3001/ViewChapter/${params.row._id}/${bookid}`} style={{ textDecoration: "none" }}>
+            <a target="_back_view" href={`https://project-final-eight.vercel.app/ViewChapter/${params.row._id}/${bookid}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </a>
           </div>
