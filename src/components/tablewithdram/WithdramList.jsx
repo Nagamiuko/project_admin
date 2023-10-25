@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import "./tableproduct.scss";
 import { Link } from "react-router-dom";
@@ -8,6 +8,8 @@ import axios from "axios";
 import { server } from "../../server";
 import PopDetail from "./popUp/PopDetail";
 import Load from "../loadalert/Load";
+import { useDispatch, useSelector } from "react-redux";
+import { getDetailWithdram } from "../redux/action/withdram";
 const WithdramList = ({ rows, loading }) => {
   const [data_search, setSearch] = useState("");
   const [datachapter, setDataChapter] = useState(rows);
@@ -15,6 +17,21 @@ const WithdramList = ({ rows, loading }) => {
   const [data_statue, setStatue] = useState("สำเร็จ");
   const [pop, setPop] = useState(false);
   const [id, setId] = useState(null);
+  const { detailwith, isLoading } = useSelector((state) => state.withdram);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDetailWithdram(id));
+  }, [id]);
+
+  // const Date = {
+  //   status: data_statue,
+  //   bankHolderName: detailwith?.bankHolderName,
+  //   email: detailwith?.mailShop,
+  //   moneyTotal: detailwith?.moneyTotal,
+  //   bankName: detailwith?.bankName,
+  //   bankAddress: detailwith?.bankAddress,
+  //   bankAccountId: detailwith?.bankAccountId,
+  // };
 
   const UpDateWithdram = (data) => {
     try {
@@ -36,10 +53,11 @@ const WithdramList = ({ rows, loading }) => {
               moneyTotal: monny,
             }
           );
+
           await axios.put(`${server}/api/withdram-update/${data?._id}`, {
             status: data_statue,
           });
-          window.location.reload();
+           window.location.reload();
         }
       });
     } catch (err) {
@@ -68,10 +86,6 @@ const WithdramList = ({ rows, loading }) => {
     }
   };
 
-  const OpenPopDatail = (data) => {
-    setPop(true);
-    setId(data._id);
-  };
   const actionColumn = [
     {
       field: "action",
@@ -87,7 +101,9 @@ const WithdramList = ({ rows, loading }) => {
                 </button>
               ) : (
                 <button
-                  onClick={() => UpDateWithdram(params.row)}
+                  onClick={() =>
+                    UpDateWithdram(params.row) || setId(params.row._id)
+                  }
                   className={`AllowButton`}
                 >
                   Approve
@@ -95,7 +111,10 @@ const WithdramList = ({ rows, loading }) => {
               )}
             </div>
             <div style={{ textDecoration: "none" }}>
-              <button onClick={() => setPop(true) || setId(params.row._id)} className="CheckButton">
+              <button
+                onClick={() => setPop(true) || setId(params.row._id)}
+                className="CheckButton"
+              >
                 Check
               </button>
             </div>
@@ -146,31 +165,33 @@ const WithdramList = ({ rows, loading }) => {
   console.log(rows);
   return (
     <div>
-      {pop && <PopDetail setPop={setPop}  id={id}/>}
-      { loading ? <Load/> :
-      <div>
-        <div className="search-bar">
-          <p>Search Shop</p>
-          <input
-            type="search"
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="หมายเลขร้านค้า หรือ ชื่อผู้รับเงิน/ชื่อผู้ขาย"
-          />
-          <div className="icon"></div>
+      {pop && <PopDetail setPop={setPop} id={id} />}
+      {loading ? (
+        <Load />
+      ) : (
+        <div>
+          <div className="search-bar">
+            <p>Search Shop</p>
+            <input
+              type="search"
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="หมายเลขร้านค้า หรือ ชื่อผู้รับเงิน/ชื่อผู้ขาย"
+            />
+            <div className="icon"></div>
+          </div>
+          <div style={{ width: "100%", height: 680 }}>
+            <DataGrid
+              rows={datachapter?.filter(
+                (da) =>
+                  da.shopId.toLowerCase().includes(data_search) ||
+                  da.bankHolderName.toLowerCase().includes(data_search)
+              )}
+              columns={columns.concat(actionColumn)}
+              getRowId={(row) => row._id}
+            />
+          </div>
         </div>
-        <div style={{ width: "100%", height: 680 }}>
-          <DataGrid
-            rows={datachapter?.filter(
-              (da) =>
-                da.shopId.toLowerCase().includes(data_search) ||
-                da.bankHolderName.toLowerCase().includes(data_search)
-            )}
-            columns={columns.concat(actionColumn)}
-            getRowId={(row) => row._id}
-          />
-        </div>
-      </div>
-       }
+      )}
     </div>
   );
 };

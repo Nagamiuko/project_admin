@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { getDetailProduct, getProductChapter } from "../redux/action/product";
 import { useDispatch, useSelector } from "react-redux";
 import Load from "../loadalert/Load";
+import { urlserverview } from "../../server";
 const DetailProduct = () => {
   const [data_search, setSearch] = useState("");
   const { bookid } = useParams();
@@ -26,7 +27,7 @@ const DetailProduct = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <a target="_back_view" href={`https://project-final-eight.vercel.app/ViewChapter/${params.row._id}/${bookid}`} style={{ textDecoration: "none" }}>
+            <a target="_back_view" href={`${urlserverview}/ViewChapter/${params.row._id}/${bookid}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </a>
           </div>
